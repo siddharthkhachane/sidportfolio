@@ -10,7 +10,7 @@ const Hero = () => {
   
   // Text animation using Typed.js-like effect
   useEffect(() => {
-    const roles = ["Front-end Developer", "3D Web Designer", "Interactive Developer", "Creative Coder"];
+    const roles = ["Software Developer", "Fullstack Engineer", "Creative Coder"];
     let roleIndex = 0;
     let charIndex = 0;
     let isDeleting = false;
@@ -71,7 +71,7 @@ const Hero = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             color={currentColor}
           >
-            Your Name
+            Siddharth Khachane
           </Name>
           
           <RoleWrapper
