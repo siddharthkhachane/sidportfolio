@@ -1,8 +1,8 @@
 export const projectsData = [
     {
       id: 'project1',
-      title: 'Immersive Virtual Gallery',
-      shortDescription: 'A WebGL-powered virtual art gallery with interactive 3D exhibits.',
+      title: 'Collab Canvas',
+      shortDescription: 'A real-time collaborative whiteboard application',
       fullDescription: `
         This project pushes the boundaries of web-based 3D experiences with a fully immersive
         virtual art gallery. Users can navigate through custom-designed exhibition spaces and
