@@ -79,7 +79,7 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
-            I'm a <RoleText ref={textRef}></RoleText><Cursor color={currentColor}>|</Cursor>
+            I'm a  <RoleText ref={textRef}></RoleText><Cursor color={currentColor}>|</Cursor>
           </RoleWrapper>
           
           <Description
