@@ -15,33 +15,33 @@ const About = () => {
   const tabsContent = {
     bio: {
       title: "About Me",
-      text: "Hi there! I'm a creative front-end developer with a passion for building immersive digital experiences. I specialize in combining technical expertise with artistic vision to create websites that not only function flawlessly but also tell compelling stories."
+      text: "I am a full stack software developer and I build scalable and reliable applications"
     },
     skills: {
       title: "My Skills",
       items: [
-        { name: "React", level: 90 },
-        { name: "Three.js", level: 85 },
-        { name: "JavaScript", level: 95 },
-        { name: "WebGL", level: 80 },
+        { name: "Java", level: 90 },
+        { name: "Python", level: 85 },
+        { name: "Spring Boot", level: 95 },
+        { name: "JavaScript", level: 80 },
         { name: "Node.js", level: 75 },
-        { name: "UI/UX Design", level: 85 }
+        { name: "AI", level: 85 }
       ]
     },
     experience: {
       title: "Experience",
       positions: [
         {
-          role: "Senior Front-end Developer",
-          company: "Digital Innovations Inc.",
-          period: "2022 - Present",
-          description: "Leading development of interactive web applications with advanced 3D visualizations and animations."
+          role: "Senior Software Engineer",
+          company: "Ultimate Kronos Group (UKG)",
+          period: "Jan 2024 - Jul 2024",
+          description: "Developed a Messaging Framework in UKG DIMENSIONS (Workforce Management Application) facilitating smooth asynchronous communication between different services utilizing RabbitMQ, Java and Spring Boot. Spearheaded development of Resiliency Framework automating message persistence process in adverse scenarios and reducing time and efforts required to recover data by 80% than previous solution of manual persistence."
         },
         {
-          role: "UI Developer",
-          company: "Creative Solutions Ltd.",
-          period: "2019 - 2022",
-          description: "Designed and implemented responsive UI components and interactive elements for client websites."
+          role: "Software Enginner",
+          company: "Ultimate Kronos Group (UKG)",
+          period: "Jul 2022 - Jan 2024",
+          description: "Implemented a Common Messaging Platform in UKG PRO (HRM application), providing a highly scalable method for communication between microservices utilizing Kafka. Applied encryption, compression and digital signatures on data using Java and Spring Boot. Designed unified monitoring dashboards on Grafana automating production monitoring process and reducing time to manually monitor by 50% on daily basis resulting in performance improvement."
         }
       ]
     }
@@ -53,7 +53,7 @@ const About = () => {
       ? tabsContent.bio.text 
       : (activeTab === 'experience')
         ? tabsContent.experience.positions[0].description
-        : "I specialize in creating immersive digital experiences with the latest web technologies.";
+        : "I specialize in creating seamless experiences with the latest web technologies.";
     
     let currentIndex = 0;
     setTypingText('');
