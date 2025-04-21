@@ -3,8 +3,6 @@ import styled from 'styled-components';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import ParticleBackground from '../common/ParticleBackground';
-import { Canvas } from '@react-three/fiber';
-import TimelineEnvironment from '../3d/TimelineEnvironment';
 import { useNavigation } from '../../context/NavigationContext';
 
 const Layout = ({ children }) => {
@@ -13,17 +11,6 @@ const Layout = ({ children }) => {
   return (
     <LayoutContainer>
       <Navbar />
-      
-      {/* 3D Background Environment */}
-      <CanvasContainer>
-        <Canvas>
-          <ambientLight intensity={0.5} />
-          <TimelineEnvironment 
-            activeSection={activeSection} 
-            sectionsData={sections} 
-          />
-        </Canvas>
-      </CanvasContainer>
       
       {/* Particle Overlay */}
       <ParticleBackground />

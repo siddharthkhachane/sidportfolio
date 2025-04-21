@@ -5,10 +5,8 @@ import About from './components/sections/About';
 import Projects from './components/sections/Projects';
 import Contact from './components/sections/Contact';
 import NavigationDots from './components/common/NavigationDots';
-import AudioToggle from './components/common/AudioToggle';
 import CustomCursor from './components/common/CustomCursor';
 import { ThemeProvider } from './context/ThemeContext';
-import { AudioProvider } from './context/AudioContext';
 import { NavigationProvider, useNavigation } from './context/NavigationContext';
 import GlobalStyles from './styles/GlobalStyles';
 
@@ -28,10 +26,8 @@ const App = () => {
   return (
     <ThemeProvider>
       <NavigationProvider>
-        <AudioProvider>
           <GlobalStyles />
           <AppContent cursorPosition={cursorPosition} />
-        </AudioProvider>
       </NavigationProvider>
     </ThemeProvider>
   );
@@ -77,7 +73,6 @@ const AppContent = ({ cursorPosition }) => {
         onChange={handleNavigation} 
       />
       
-      <AudioToggle />
     </div>
   );
 };

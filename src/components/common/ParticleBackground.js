@@ -1,123 +1,68 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { useNavigation } from '../../context/NavigationContext';
 
 const ParticleBackground = () => {
-  const canvasRef = useRef(null);
-  const { sections, activeSection } = useNavigation();
-  const currentColor = sections[activeSection].color;
-  
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    
-    // Set canvas dimensions
-    const setCanvasDimensions = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    
-    setCanvasDimensions();
-    
-    // Handle resize
-    window.addEventListener('resize', setCanvasDimensions);
-    
-    // Particle properties
-    const particlesArray = [];
-    const numberOfParticles = 100;
-    
-    // Create particles
-    class Particle {
-      constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 5 + 1;
-        this.speedX = Math.random() * 1 - 0.5;
-        this.speedY = Math.random() * 1 - 0.5;
-        this.color = currentColor;
-        this.opacity = Math.random() * 0.5 + 0.1;
-      }
-      
-      update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-        
-        // Bounce off edges
-        if (this.x > canvas.width || this.x < 0) {
-          this.speedX = -this.speedX;
-        }
-        
-        if (this.y > canvas.height || this.y < 0) {
-          this.speedY = -this.speedY;
-        }
-      }
-      
-      draw() {
-        ctx.fillStyle = this.color;
-        ctx.globalAlpha = this.opacity;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-    
-    // Initialize particles
-    const init = () => {
-      for (let i = 0; i < numberOfParticles; i++) {
-        particlesArray.push(new Particle());
-      }
-    };
-    
-    init();
-    
-    // Animation loop
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      // Update and draw particles
-      for (let i = 0; i < particlesArray.length; i++) {
-        particlesArray[i].update();
-        particlesArray[i].draw();
-        
-        // Connect particles with lines
-        for (let j = i; j < particlesArray.length; j++) {
-          const dx = particlesArray[i].x - particlesArray[j].x;
-          const dy = particlesArray[i].y - particlesArray[j].y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          
-          if (distance < 100) {
-            ctx.beginPath();
-            ctx.strokeStyle = currentColor;
-            ctx.globalAlpha = 0.1;
-            ctx.lineWidth = 1;
-            ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
-            ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
-            ctx.stroke();
-          }
-        }
-      }
-      
-      requestAnimationFrame(animate);
-    };
-    
-    animate();
-    
-    return () => {
-      window.removeEventListener('resize', setCanvasDimensions);
-    };
-  }, [currentColor]);
-  
-  return <Canvas ref={canvasRef} />;
+  return (
+    <Background />
+  );
 };
 
-const Canvas = styled.canvas`
+const Background = styled.div`
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  background: linear-gradient(135deg, #0d0221 0%, #121236 100%);
+  background-size: 100% 100%;
+  overflow: hidden;
   pointer-events: none;
   z-index: 1;
+  
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    top: -50%;
+    left: -50%;
+    z-index: -1;
+  }
+  
+  &::before {
+    background-image: linear-gradient(
+      0deg,
+      transparent 24%,
+      rgba(107, 37, 193, 0.3) 25%,
+      rgba(107, 37, 193, 0.3) 26%,
+      transparent 27%,
+      transparent 74%,
+      rgba(107, 37, 193, 0.3) 75%,
+      rgba(107, 37, 193, 0.3) 76%,
+      transparent 77%,
+      transparent
+    );
+    background-size: 60px 60px;
+    transform: rotate(-30deg);
+  }
+  
+  &::after {
+    background-image: linear-gradient(
+      90deg,
+      transparent 24%,
+      rgba(76, 35, 174, 0.3) 25%,
+      rgba(76, 35, 174, 0.3) 26%,
+      transparent 27%,
+      transparent 74%,
+      rgba(76, 35, 174, 0.3) 75%,
+      rgba(76, 35, 174, 0.3) 76%,
+      transparent 77%,
+      transparent
+    );
+    background-size: 60px 60px;
+    transform: rotate(30deg);
+  }
 `;
 
 export default ParticleBackground;

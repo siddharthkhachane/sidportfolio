@@ -62,7 +62,7 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            Hello, I'm
+            Hello, I'm 
           </Greeting>
           
           <Name
@@ -79,7 +79,7 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
-            I'm a  <RoleText ref={textRef}></RoleText><Cursor color={currentColor}>|</Cursor>
+          <RoleText ref={textRef}></RoleText><Cursor color={currentColor}>|</Cursor>
           </RoleWrapper>
           
           <Description
@@ -105,18 +105,6 @@ const Hero = () => {
             </SecondaryButton>
           </ButtonsContainer>
         </TextContent>
-        
-        <Visual3D
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-        >
-          <ShapeContainer>
-            <FloatingShape color={currentColor} delay={0} />
-            <FloatingShape color={currentColor} delay={0.5} />
-            <FloatingShape color={currentColor} delay={1} />
-          </ShapeContainer>
-        </Visual3D>
       </ContentWrapper>
       
       <ScrollIndicator onClick={handleExploreClick}>
