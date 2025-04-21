@@ -1,1 +1,1 @@
-Live deployment: https://sidportfolio-six.vercel.app/
+Live deployment: https://sidportfolio-chi.vercel.app/
