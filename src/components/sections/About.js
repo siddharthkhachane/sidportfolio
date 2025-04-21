@@ -15,7 +15,7 @@ const About = () => {
   const tabsContent = {
     bio: {
       title: "About Me",
-      text: "I am a full stack software developer and I build scalable and reliable applications"
+      text: "I'm a full stack software developer and I build scalable and reliable applications"
     },
     skills: {
       title: "My Skills",

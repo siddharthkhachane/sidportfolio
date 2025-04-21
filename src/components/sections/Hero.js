@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { useNavigation } from '../../context/NavigationContext';
@@ -6,48 +6,6 @@ import { useNavigation } from '../../context/NavigationContext';
 const Hero = () => {
   const { sections, activeSection, setActiveSection } = useNavigation();
   const currentColor = sections[activeSection].color;
-  const textRef = useRef();
-  
-  // Text animation using Typed.js-like effect
-  useEffect(() => {
-    const roles = ["Software Developer", "Fullstack Engineer", "Creative Coder"];
-    let roleIndex = 0;
-    let charIndex = 0;
-    let isDeleting = false;
-    let textContent = "";
-    
-    const type = () => {
-      const currentRole = roles[roleIndex];
-      const typeSpeed = isDeleting ? 50 : 150;
-      
-      if (isDeleting) {
-        textContent = currentRole.substring(0, charIndex - 1);
-        charIndex--;
-      } else {
-        textContent = currentRole.substring(0, charIndex + 1);
-        charIndex++;
-      }
-      
-      if (textRef.current) {
-        textRef.current.textContent = textContent;
-      }
-      
-      if (!isDeleting && charIndex === currentRole.length) {
-        isDeleting = true;
-        setTimeout(type, 1500);
-      } else if (isDeleting && charIndex === 0) {
-        isDeleting = false;
-        roleIndex = (roleIndex + 1) % roles.length;
-        setTimeout(type, 500);
-      } else {
-        setTimeout(type, typeSpeed);
-      }
-    };
-    
-    const typingTimer = setTimeout(type, 1000);
-    
-    return () => clearTimeout(typingTimer);
-  }, []);
   
   const handleExploreClick = () => {
     setActiveSection(1); // Navigate to the About section
@@ -79,7 +37,7 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
-          <RoleText ref={textRef}></RoleText><Cursor color={currentColor}>|</Cursor>
+            <RoleText>I am a full stack software developer and I build scalable and reliable applications</RoleText>
           </RoleWrapper>
           
           <Description
@@ -100,7 +58,7 @@ const Hero = () => {
               <ButtonIcon>↓</ButtonIcon>
             </PrimaryButton>
             
-            <SecondaryButton href="#contact" color={currentColor}>
+            <SecondaryButton href="#contact" color={currentColor} onClick={() => setActiveSection(sections.findIndex(section => section.id === 'contact'))}>
               Get In Touch
             </SecondaryButton>
           </ButtonsContainer>
@@ -115,6 +73,7 @@ const Hero = () => {
   );
 };
 
+// Styled components
 const HeroContainer = styled.div`
   height: 100%;
   width: 100%;
@@ -176,18 +135,6 @@ const RoleText = styled.span`
   display: inline-block;
 `;
 
-const Cursor = styled.span`
-  display: inline-block;
-  color: ${props => props.color};
-  font-weight: bold;
-  animation: blink 1s infinite;
-  
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-  }
-`;
-
 const Description = styled(motion.p)`
   font-size: 1.1rem;
   line-height: 1.6;
@@ -246,58 +193,6 @@ const SecondaryButton = styled.a`
   &:hover {
     background: ${props => `${props.color}20` || 'rgba(255, 255, 255, 0.1)'};
     transform: translateY(-3px);
-  }
-`;
-
-const Visual3D = styled(motion.div)`
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 400px;
-`;
-
-const ShapeContainer = styled.div`
-  position: relative;
-  width: 300px;
-  height: 300px;
-`;
-
-// A decorative floating shape component
-const FloatingShape = styled.div`
-  position: absolute;
-  width: 150px;
-  height: 150px;
-  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-  background: ${props => `${props.color}30` || 'rgba(255, 255, 255, 0.1)'};
-  border: 1px solid ${props => `${props.color}60` || 'rgba(255, 255, 255, 0.2)'};
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  animation: float 6s infinite ease-in-out;
-  animation-delay: ${props => props.delay}s;
-  
-  &:nth-child(2) {
-    width: 200px;
-    height: 200px;
-    opacity: 0.6;
-    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-  }
-  
-  &:nth-child(3) {
-    width: 100px;
-    height: 100px;
-    opacity: 0.8;
-    border-radius: 40% 60% 50% 50% / 40% 50% 50% 60%;
-  }
-  
-  @keyframes float {
-    0%, 100% {
-      transform: translate(-50%, -50%);
-    }
-    50% {
-      transform: translate(-50%, -60%) rotate(10deg);
-    }
   }
 `;
 

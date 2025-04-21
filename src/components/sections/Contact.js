@@ -136,28 +136,25 @@ const Contact = () => {
             
             <InfoItem>
               <InfoIcon>📧</InfoIcon>
-              <InfoText>email@example.com</InfoText>
+              <InfoText>khachane@usc.edu</InfoText>
             </InfoItem>
             
             <InfoItem>
               <InfoIcon>📱</InfoIcon>
-              <InfoText>+1 (555) 123-4567</InfoText>
+              <InfoText>+1 (213) 512-5004</InfoText>
             </InfoItem>
             
             <InfoItem>
               <InfoIcon>📍</InfoIcon>
-              <InfoText>San Francisco, CA</InfoText>
+              <InfoText>Los Angeles, CA</InfoText>
             </InfoItem>
             
             <SocialLinks>
-              <SocialLink href="#" color={currentColor}>
+              <SocialLink href="https://github.com/siddharthkhachane" color={currentColor}>
                 <SocialIcon>GitHub</SocialIcon>
               </SocialLink>
-              <SocialLink href="#" color={currentColor}>
+              <SocialLink href="https://www.linkedin.com/in/siddharth-khachane1/" color={currentColor}>
                 <SocialIcon>LinkedIn</SocialIcon>
-              </SocialLink>
-              <SocialLink href="#" color={currentColor}>
-                <SocialIcon>Twitter</SocialIcon>
               </SocialLink>
             </SocialLinks>
           </ContactInfo>

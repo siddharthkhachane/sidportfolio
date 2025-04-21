@@ -9,14 +9,9 @@ const Footer = () => {
   return (
     <FooterContainer>
       <FooterContent>
-        <Copyright>
-          © {new Date().getFullYear()} Your Name. All rights reserved.
-        </Copyright>
-        
-        <SocialLinks>
+       <SocialLinks>
           <SocialLink href="#" color={currentColor}>GitHub</SocialLink>
           <SocialLink href="#" color={currentColor}>LinkedIn</SocialLink>
-          <SocialLink href="#" color={currentColor}>Twitter</SocialLink>
         </SocialLinks>
       </FooterContent>
     </FooterContainer>

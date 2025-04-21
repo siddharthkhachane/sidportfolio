@@ -4,30 +4,21 @@ export const projectsData = [
       title: 'Collab Canvas',
       shortDescription: 'A real-time collaborative whiteboard application',
       fullDescription: `
-        This project pushes the boundaries of web-based 3D experiences with a fully immersive
-        virtual art gallery. Users can navigate through custom-designed exhibition spaces and
-        interact with artwork in ways impossible in physical galleries.
-        
-        The experience features spatial audio, dynamic lighting systems, and physics-based
-        interactions that respond naturally to user inputs. Each exhibition space was carefully
-        designed to showcase different artistic styles and mediums.
+      This project delivers a powerful real-time collaborative whiteboard where multiple users can simultaneously create and edit content on a shared canvas. Changes are instantly broadcast to all participants with MongoDB-backed persistence ensuring no work is ever lost. The system combines fluid drawing capabilities with efficient state management, creating a seamless digital collaboration space that feels responsive and intuitive across all devices.
       `,
-      image: '/assets/images/project-previews/gallery.jpg',
-      technologies: ['Three.js', 'WebGL', 'React', 'GLSL Shaders', 'Web Audio API'],
+      image: 'public/images/colabcanvas.jpg',
+      technologies: ['React', 'JavaScript', 'Deployment', 'MongoDB', 'Nodejs', 'Socket.io'],
       features: [
-        'Fully explorable 3D gallery spaces',
-        'Interactive artwork elements',
-        'Custom lighting and post-processing effects',
-        'Spatial audio environment',
-        'Responsive design works on both desktop and mobile'
+        'Real-time collaboration with cursor visibility for multiple users',
+        'Persistent state management with automatic cloud backup',
       ],
-      liveUrl: 'https://gallery.example.com',
-      codeUrl: 'https://github.com/yourusername/virtual-gallery',
+      liveUrl: 'https://sidproject-41.wl.r.appspot.com/',
+      codeUrl: 'https://github.com/siddharthkhachane/CollabCanvas/',
       year: 2024
     },
     {
       id: 'project2',
-      title: 'Neural Audio Visualizer',
+      title: 'WPM - Typing speed',
       shortDescription: 'Audio visualization tool that uses machine learning to generate unique visual patterns.',
       fullDescription: `
         This project combines audio analysis with machine learning to create stunning real-time
