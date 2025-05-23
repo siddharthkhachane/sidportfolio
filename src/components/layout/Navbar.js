@@ -54,8 +54,6 @@ const Navbar = () => {
       
       <NavActions>
         <ThemeToggle>
-          <span>☀️</span>
-          <span>🌙</span>
         </ThemeToggle>
       </NavActions>
     </NavbarContainer>
