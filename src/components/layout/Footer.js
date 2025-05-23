@@ -10,8 +10,8 @@ const Footer = () => {
     <FooterContainer>
       <FooterContent>
        <SocialLinks>
-          <SocialLink href="#" color={currentColor}>GitHub</SocialLink>
-          <SocialLink href="#" color={currentColor}>LinkedIn</SocialLink>
+          <SocialLink href="https://github.com/siddharthkhachane" color={currentColor}>GitHub</SocialLink>
+          <SocialLink href="https://www.linkedin.com/in/siddharth-khachane1/" color={currentColor}>LinkedIn</SocialLink>
         </SocialLinks>
       </FooterContent>
     </FooterContainer>
