@@ -27,17 +27,7 @@ const ProjectDetails = ({ project, onClose, color }) => {
             <p>{project.fullDescription}</p>
           </Description>
           
-          <FeaturesSection>
-            <h2>Key Features</h2>
-            <FeaturesList>
-              {project.features.map((feature, index) => (
-                <FeatureItem key={index} color={color}>
-                  <FeatureIcon color={color}>✓</FeatureIcon>
-                  <span>{feature}</span>
-                </FeatureItem>
-              ))}
-            </FeaturesList>
-          </FeaturesSection>
+          
         </MainContent>
         
         <Sidebar>
