@@ -42,7 +42,7 @@ export const projectsData = [
       fullDescription: `
         MazeRunner is a reinforcement learning project focused on training an AI agent to autonomously navigate complex mazes. The agent learns optimal paths by exploring its environment, receiving rewards, and continuously improving its strategy through interaction and feedback.
       `,
-      image: 'images/Mazerunner.png',
+      image: 'images/MazeRunner.png',
       technologies: ['Reinforcement Learning', 'React', 'CSS'],
       features: [
         'Draw Maze, set starting points',
