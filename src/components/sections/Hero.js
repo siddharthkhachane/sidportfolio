@@ -37,7 +37,7 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
-            <RoleText>I am a full stack software developer and I build scalable and reliable applications</RoleText>
+            <RoleText>I am a full stack developer and I build scalable and reliable applications</RoleText>
           </RoleWrapper>
           
           <Description
@@ -45,7 +45,7 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.6 }}
           >
-            Developing Full stack scalable and optimized software with AI Integration
+            Developing optimized software with AI Integration
           </Description>
           
           <ButtonsContainer
