@@ -74,6 +74,7 @@ const ProjectDetails = ({ project, onClose, color }) => {
 };
 
 const DetailsContainer = styled(motion.div)`
+  scroll-behavior: smooth;
   background: rgba(15, 17, 26, 0.95);
   backdrop-filter: blur(10px);
   border-radius: 20px;
