@@ -1,181 +1,143 @@
-import { createGlobalStyle } from 'styled-components';
+import React, { useState, useEffect, useRef } from 'react';
+import Layout from './components/layout/Layout';
+import Hero from './components/sections/Hero';
+import About from './components/sections/About';
+import Projects from './components/sections/Projects';
+import Contact from './components/sections/Contact';
+import NavigationDots from './components/common/NavigationDots';
+import CustomCursor from './components/common/CustomCursor';
+import { ThemeProvider } from './context/ThemeContext';
+import { NavigationProvider, useNavigation } from './context/NavigationContext';
+import GlobalStyles from './styles/GlobalStyles';
 
-const GlobalStyles = createGlobalStyle`
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+const App = () => {
+  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   
-  html, body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    background-color: #0F111A;
-    color: white;
-    overflow: hidden;
-    height: 100%;
-    width: 100%;
-  }
-  
-  #root {
-    height: 100%;
-    width: 100%;
-  }
-  
-  .app {
-    height: 100%;
-    width: 100%;
-  }
-  
-  ::-webkit-scrollbar {
-    width: 6px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 3px;
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.3);
-  }
+  useEffect(() => {
+    const handleMouseMove = (event) => {
+      setCursorPosition({ x: event.clientX, y: event.clientY });
+    };
+    
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05);
-  }
-  
-  h1, h2, h3, h4, h5, h6 {
-    line-height: 1.2;
-    font-weight: 700;
-  }
-  
-  p {
-    line-height: 1.5;
-  }
-  
-  button {
-    font-family: inherit;
-  }
-  
-  *:focus-visible {
-    outline: 2px solid #63ACE5;
-    outline-offset: 2px;
-  }
+  return (
+    <ThemeProvider>
+      <NavigationProvider>
+          <GlobalStyles />
+          <AppContent cursorPosition={cursorPosition} />
+      </NavigationProvider>
+    </ThemeProvider>
+  );
+};
 
-  @media (max-width: 768px) {
-    html, body {
-      overflow-x: hidden;
-    }
-    
-    main {
-      padding: 1rem !important;
-    }
-    
-    h1 {
-      font-size: 2.5rem !important;
-    }
-    
-    h2 {
-      font-size: 1.8rem !important;
-    }
-    
-    p {
-      font-size: 0.9rem !important;
-      text-align: center;
-    }
-    
-    div[style*="right: 30px"] {
-      right: 15px !important;
-    }
-    
-    div[style*="width: 12px"] {
-      width: 16px !important;
-      height: 16px !important;
-    }
-    
-    div[style*="padding: 2rem"] {
-      padding: 1rem !important;
-    }
-    
-    div[style*="gap: 1.5rem"] {
-      flex-direction: column !important;
-      gap: 1rem !important;
-    }
-    
-    div[style*="grid-template-columns"] {
-      grid-template-columns: 1fr !important;
-    }
-    
-    div[style*="font-size: 4rem"] {
-      font-size: 2.5rem !important;
-    }
-    
-    div[style*="font-size: 2rem"] {
-      font-size: 1.5rem !important;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    main {
-      padding: 0.5rem !important;
-    }
-    
-    h1 {
-      font-size: 2rem !important;
-    }
-    
-    h2 {
-      font-size: 1.5rem !important;
-    }
-    
-    p {
-      font-size: 0.8rem !important;
-    }
-    
-    div[style*="right: 30px"], div[style*="right: 15px"] {
-      right: 10px !important;
-    }
-    
-    div[style*="width: 12px"], div[style*="width: 16px"] {
-      width: 18px !important;
-      height: 18px !important;
-    }
-    
-    div[style*="padding: 2rem"], div[style*="padding: 1rem"] {
-      padding: 0.5rem !important;
-    }
-    
-    div[style*="font-size: 4rem"], div[style*="font-size: 2.5rem"] {
-      font-size: 2rem !important;
-    }
-    
-    div[style*="font-size: 2rem"], div[style*="font-size: 1.5rem"] {
-      font-size: 1.2rem !important;
-    }
-    
-    button {
-      padding: 0.6rem 1rem !important;
-      font-size: 0.9rem !important;
-    }
-  }
-  
-  @media (max-width: 320px) {
-    h1 {
-      font-size: 1.8rem !important;
-    }
-    
-    h2 {
-      font-size: 1.3rem !important;
-    }
-    
-    p {
-      font-size: 0.75rem !important;
-    }
-  }
-`;
+export default App;
 
-export default GlobalStyles;
+const AppContent = ({ cursorPosition }) => {
+  const { sections, activeSection, setActiveSection } = useNavigation();
+  const isScrollingRef = useRef(false);
+  const scrollTimeoutRef = useRef(null);
+  const touchStartY = useRef(0);
+  const touchEndY = useRef(0);
+  
+  const handleNavigation = (index) => {
+    setActiveSection(index);
+  };
+
+  const handleWheel = (e) => {
+    e.preventDefault();
+    
+    if (isScrollingRef.current) return;
+    
+    const threshold = 50;
+    
+    if (Math.abs(e.deltaY) < threshold) return;
+    
+    isScrollingRef.current = true;
+    
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
+    
+    if (e.deltaY > threshold && activeSection < sections.length - 1) {
+      setActiveSection(prev => prev + 1);
+    } else if (e.deltaY < -threshold && activeSection > 0) {
+      setActiveSection(prev => prev - 1);
+    }
+    
+    scrollTimeoutRef.current = setTimeout(() => {
+      isScrollingRef.current = false;
+    }, 800);
+  };
+
+  const handleTouchStart = (e) => {
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e) => {
+    touchEndY.current = e.changedTouches[0].clientY;
+    handleSwipe();
+  };
+
+  const handleSwipe = () => {
+    if (isScrollingRef.current) return;
+    
+    const swipeThreshold = 50;
+    const swipeDistance = touchStartY.current - touchEndY.current;
+    
+    if (Math.abs(swipeDistance) < swipeThreshold) return;
+    
+    isScrollingRef.current = true;
+    
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
+    
+    if (swipeDistance > 0 && activeSection < sections.length - 1) {
+      setActiveSection(prev => prev + 1);
+    } else if (swipeDistance < 0 && activeSection > 0) {
+      setActiveSection(prev => prev - 1);
+    }
+    
+    scrollTimeoutRef.current = setTimeout(() => {
+      isScrollingRef.current = false;
+    }, 800);
+  };
+  
+  useEffect(() => {
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, []);
+  
+  return (
+    <div 
+      className="app" 
+      onWheel={handleWheel}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
+      <CustomCursor 
+        position={cursorPosition} 
+        color={sections[activeSection].color} 
+      />
+      
+      <Layout>
+        {activeSection === 0 && <Hero />}
+        {activeSection === 1 && <About />}
+        {activeSection === 2 && <Projects />}
+        {activeSection === 3 && <Contact />}
+      </Layout>
+      
+      <NavigationDots 
+        sections={sections} 
+        activeSection={activeSection} 
+        onChange={handleNavigation} 
+      />
+      
+    </div>
+  );
+};
