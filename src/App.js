@@ -38,6 +38,8 @@ const AppContent = ({ cursorPosition }) => {
   const { sections, activeSection, setActiveSection } = useNavigation();
   const isScrollingRef = useRef(false);
   const scrollTimeoutRef = useRef(null);
+  const touchStartY = useRef(0);
+  const touchEndY = useRef(0);
   
   const handleNavigation = (index) => {
     setActiveSection(index);
@@ -68,6 +70,40 @@ const AppContent = ({ cursorPosition }) => {
       isScrollingRef.current = false;
     }, 800);
   };
+
+  const handleTouchStart = (e) => {
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e) => {
+    touchEndY.current = e.changedTouches[0].clientY;
+    handleSwipe();
+  };
+
+  const handleSwipe = () => {
+    if (isScrollingRef.current) return;
+    
+    const swipeThreshold = 50;
+    const swipeDistance = touchStartY.current - touchEndY.current;
+    
+    if (Math.abs(swipeDistance) < swipeThreshold) return;
+    
+    isScrollingRef.current = true;
+    
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
+    
+    if (swipeDistance > 0 && activeSection < sections.length - 1) {
+      setActiveSection(prev => prev + 1);
+    } else if (swipeDistance < 0 && activeSection > 0) {
+      setActiveSection(prev => prev - 1);
+    }
+    
+    scrollTimeoutRef.current = setTimeout(() => {
+      isScrollingRef.current = false;
+    }, 800);
+  };
   
   useEffect(() => {
     return () => {
@@ -78,7 +114,12 @@ const AppContent = ({ cursorPosition }) => {
   }, []);
   
   return (
-    <div className="app" onWheel={handleWheel}>
+    <div 
+      className="app" 
+      onWheel={handleWheel}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
       <CustomCursor 
         position={cursorPosition} 
         color={sections[activeSection].color} 
