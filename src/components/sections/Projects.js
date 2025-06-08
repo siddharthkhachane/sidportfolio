@@ -1,147 +1,137 @@
-import { createGlobalStyle } from 'styled-components';
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { motion, AnimatePresence } from 'framer-motion';
+import ProjectCard from '../projects/ProjectCard';
+import ProjectDetails from '../projects/ProjectDetails';
+import { projectsData } from '../../data/projects';
+import { useNavigation } from '../../context/NavigationContext';
 
-const GlobalStyles = createGlobalStyle`
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+const Projects = ({ setIsModalOpen }) => {
+  const { sections, activeSection } = useNavigation();
+  const [selectedProject, setSelectedProject] = useState(null);
+  const currentColor = sections[activeSection].color;
   
-  html {
-    font-size: 16px;
-    scroll-behavior: smooth;
-  }
+  const handleProjectClick = (project) => {
+    setSelectedProject(project);
+    if (setIsModalOpen) {
+      setIsModalOpen(true);
+      document.dispatchEvent(new CustomEvent('modalOpen'));
+    }
+  };
   
-  body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    background: #0A0E1A;
-    color: white;
-    overflow-x: hidden;
-    line-height: 1.6;
-  }
+  const closeProjectDetails = () => {
+    setSelectedProject(null);
+    if (setIsModalOpen) {
+      setIsModalOpen(false);
+      document.dispatchEvent(new CustomEvent('modalClose'));
+    }
+  };
   
-  .app {
-    min-height: 100vh;
-    position: relative;
-    overflow: hidden;
-  }
-  
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 3px;
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 3px;
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.3);
-  }
+  return (
+    <ProjectsContainer>
+      <SectionHeader backgroundColor={currentColor}>
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          My Projects
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          Explore my latest work and creative endeavors
+        </motion.p>
+      </SectionHeader>
+      
+      <ProjectsGrid>
+        {projectsData.map((project, index) => (
+          <motion.div
+            key={project.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 * (index + 1) }}
+          >
+            <ProjectCard 
+              project={project} 
+              onClick={() => handleProjectClick(project)}
+              color={currentColor}
+            />
+          </motion.div>
+        ))}
+      </ProjectsGrid>
+      
+      <AnimatePresence>
+        {selectedProject && (
+          <ProjectDetailsOverlay
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={closeProjectDetails}
+          >
+            <ProjectDetails 
+              project={selectedProject} 
+              onClose={closeProjectDetails}
+              color={currentColor}
+            />
+          </ProjectDetailsOverlay>
+        )}
+      </AnimatePresence>
+    </ProjectsContainer>
+  );
+};
 
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05);
-  }
+const ProjectsContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const SectionHeader = styled.div`
+  text-align: center;
+  margin-bottom: 3rem;
   
-  h1, h2, h3, h4, h5, h6 {
-    line-height: 1.2;
-    font-weight: 700;
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(to right, #ffffff, ${props => props.backgroundColor});
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
   
   p {
-    line-height: 1.5;
-  }
-  
-  button {
-    font-family: inherit;
-  }
-  
-  *:focus-visible {
-    outline: 2px solid #63ACE5;
-    outline-offset: 2px;
-  }
-
-  @media (max-width: 768px) {
-    html, body {
-      overflow-x: hidden;
-      touch-action: pan-y;
-      -webkit-overflow-scrolling: touch;
-    }
-    
-    .app {
-      touch-action: pan-y;
-      -webkit-overflow-scrolling: touch;
-    }
-    
-    main {
-      padding: 1rem !important;
-    }
-    
-    h1 {
-      font-size: 2.5rem !important;
-    }
-    
-    h2 {
-      font-size: 2rem !important;
-    }
-    
-    p {
-      font-size: 1rem !important;
-    }
-    
-    div[style*="right: 30px"], div[style*="right: 15px"] {
-      right: 15px !important;
-    }
-    
-    div[style*="width: 12px"], div[style*="width: 16px"] {
-      width: 16px !important;
-      height: 16px !important;
-    }
-    
-    div[style*="font-size: 2rem"] {
-      font-size: 1.5rem !important;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    main {
-      padding: 0.5rem !important;
-    }
-    
-    h1 {
-      font-size: 2rem !important;
-    }
-    
-    h2 {
-      font-size: 1.5rem !important;
-    }
-    
-    p {
-      font-size: 0.8rem !important;
-    }
-    
-    div[style*="right: 30px"], div[style*="right: 15px"] {
-      right: 10px !important;
-    }
-    
-    div[style*="width: 12px"], div[style*="width: 16px"] {
-      width: 18px !important;
-      height: 18px !important;
-    }
-    
-    div[style*="padding: 2rem"], div[style*="padding: 1rem"] {
-      padding: 0.5rem !important;
-    }
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.8);
   }
 `;
 
-export default GlobalStyles;
+const ProjectsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+  width: 100%;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const ProjectDetailsOverlay = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+`;
+
+export default Projects;
