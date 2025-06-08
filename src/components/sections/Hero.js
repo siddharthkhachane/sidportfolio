@@ -1,61 +1,91 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { useNavigation } from '../../context/NavigationContext';
 
+const roles = [
+  'Full Stack Developer',
+  'Software Engineer',
+  'Problem Solver',
+  'Tech Enthusiast'
+];
+
 const Hero = () => {
   const { sections, activeSection, setActiveSection } = useNavigation();
+  const [currentRole, setCurrentRole] = useState(0);
   const currentColor = sections[activeSection].color;
-  
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentRole((prev) => (prev + 1) % roles.length);
+    }, 3000);
+    
+    return () => clearInterval(interval);
+  }, []);
+
   const handleExploreClick = () => {
-    setActiveSection(1); // Navigate to the About section
+    setActiveSection(1); // Navigate to About section
   };
-  
+
+  const handleDownloadCV = () => {
+    // Add your CV download logic here
+    console.log('Downloading CV...');
+  };
+
   return (
     <HeroContainer>
       <ContentWrapper>
         <TextContent>
           <Greeting
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Hello, I'm 
+            Hi there! I'm
           </Greeting>
           
           <Name
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
             color={currentColor}
           >
             Siddharth Khachane
           </Name>
           
           <RoleWrapper
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
           >
-            <RoleText>I am a full stack developer and I build scalable and reliable applications</RoleText>
+            <RoleText
+              key={currentRole}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5 }}
+            >
+              {roles[currentRole]}
+            </RoleText>
           </RoleWrapper>
           
           <Description
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
           >
-            Developing optimized software with AI Integration
+            Passionate about creating innovative solutions and bringing ideas to life through code. 
+            I love building user-centric applications and exploring new technologies.
           </Description>
           
           <ButtonsContainer
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.8 }}
+            transition={{ duration: 0.8, delay: 1.0 }}
           >
-            <PrimaryButton onClick={handleExploreClick} color={currentColor}>
-              Explore My Work
-              <ButtonIcon>↓</ButtonIcon>
+            <PrimaryButton color={currentColor} onClick={handleDownloadCV}>
+              <ButtonIcon>📄</ButtonIcon>
+              Download CV
             </PrimaryButton>
             
             <SecondaryButton href="#contact" color={currentColor} onClick={() => setActiveSection(sections.findIndex(section => section.id === 'contact'))}>
@@ -75,33 +105,63 @@ const Hero = () => {
 
 // Styled components
 const HeroContainer = styled.div`
-  height: 100%;
+  height: 100vh;
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   position: relative;
+  padding: 0 2rem;
+  
+  @media (max-width: 768px) {
+    padding: 0 1rem;
+    height: 100vh;
+    justify-content: center;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 0 0.5rem;
+  }
 `;
 
 const ContentWrapper = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
   
   @media (max-width: 768px) {
     flex-direction: column;
-    gap: 3rem;
+    gap: 2rem;
+    text-align: center;
   }
 `;
 
 const TextContent = styled.div`
   flex: 1;
+  max-width: 800px;
+  
+  @media (max-width: 768px) {
+    max-width: 100%;
+    width: 100%;
+  }
 `;
 
 const Greeting = styled(motion.p)`
   font-size: 1.5rem;
   color: rgba(255, 255, 255, 0.8);
   margin-bottom: 1rem;
+  
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
 `;
 
 const Name = styled(motion.h1)`
@@ -111,9 +171,20 @@ const Name = styled(motion.h1)`
   background: linear-gradient(to right, #ffffff, ${props => props.color});
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  line-height: 1.1;
   
   @media (max-width: 768px) {
-    font-size: 3rem;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 2rem;
+    margin-bottom: 0.8rem;
+  }
+  
+  @media (max-width: 320px) {
+    font-size: 1.8rem;
   }
 `;
 
@@ -123,15 +194,27 @@ const RoleWrapper = styled(motion.div)`
   margin-bottom: 1.5rem;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   height: 2.5rem;
   
   @media (max-width: 768px) {
     font-size: 1.5rem;
     height: 2rem;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 1.2rem;
+    height: 1.5rem;
+  }
+  
+  @media (max-width: 320px) {
+    font-size: 1rem;
   }
 `;
 
-const RoleText = styled.span`
+const RoleText = styled(motion.span)`
   display: inline-block;
 `;
 
@@ -141,15 +224,36 @@ const Description = styled(motion.p)`
   color: rgba(255, 255, 255, 0.8);
   max-width: 600px;
   margin-bottom: 2rem;
+  
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    max-width: 100%;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
 `;
 
 const ButtonsContainer = styled(motion.div)`
   display: flex;
   gap: 1.5rem;
   
+  @media (max-width: 768px) {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
   @media (max-width: 576px) {
     flex-direction: column;
+    align-items: center;
     gap: 1rem;
+    width: 100%;
   }
 `;
 
@@ -166,33 +270,67 @@ const PrimaryButton = styled.button`
   align-items: center;
   gap: 0.5rem;
   transition: all 0.3s ease;
+  min-height: 44px;
+  white-space: nowrap;
   
   &:hover {
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   }
-`;
-
-const ButtonIcon = styled.span`
-  font-size: 1.2rem;
+  
+  @media (max-width: 576px) {
+    width: 100%;
+    max-width: 250px;
+    justify-content: center;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+    padding: 0.7rem 1.2rem;
+  }
 `;
 
 const SecondaryButton = styled.a`
   background: transparent;
-  color: white;
-  border: 1px solid ${props => props.color || '#4B86B4'};
+  color: ${props => props.color || '#4B86B4'};
+  border: 2px solid ${props => props.color || '#4B86B4'};
   border-radius: 30px;
   padding: 0.8rem 1.5rem;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   text-decoration: none;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   transition: all 0.3s ease;
+  min-height: 44px;
+  white-space: nowrap;
   
   &:hover {
-    background: ${props => `${props.color}20` || 'rgba(255, 255, 255, 0.1)'};
+    background: ${props => props.color || '#4B86B4'};
+    color: white;
     transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  }
+  
+  @media (max-width: 576px) {
+    width: 100%;
+    max-width: 250px;
+    justify-content: center;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+    padding: 0.7rem 1.2rem;
+  }
+`;
+
+const ButtonIcon = styled.span`
+  font-size: 1.2rem;
+  
+  @media (max-width: 480px) {
+    font-size: 1rem;
   }
 `;
 
@@ -206,22 +344,34 @@ const ScrollIndicator = styled.div`
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
-  opacity: 0.7;
-  transition: opacity 0.3s ease;
+  transition: all 0.3s ease;
   
   &:hover {
-    opacity: 1;
+    transform: translateX(-50%) translateY(-5px);
+  }
+  
+  @media (max-width: 768px) {
+    bottom: 1.5rem;
+  }
+  
+  @media (max-width: 480px) {
+    bottom: 1rem;
+    gap: 0.3rem;
   }
 `;
 
 const ScrollText = styled.span`
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.6);
+  
+  @media (max-width: 480px) {
+    font-size: 0.7rem;
+  }
 `;
 
 const ScrollIcon = styled.span`
   font-size: 1.2rem;
-  color: white;
+  color: rgba(255, 255, 255, 0.6);
   animation: bounce 2s infinite;
   
   @keyframes bounce {
@@ -229,11 +379,15 @@ const ScrollIcon = styled.span`
       transform: translateY(0);
     }
     40% {
-      transform: translateY(-10px);
-    }
-    60% {
       transform: translateY(-5px);
     }
+    60% {
+      transform: translateY(-3px);
+    }
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 1rem;
   }
 `;
 
