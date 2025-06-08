@@ -41,13 +41,14 @@ const AppContent = ({ cursorPosition }) => {
   const touchStartY = useRef(0);
   const touchEndY = useRef(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [allowSectionNavigation, setAllowSectionNavigation] = useState(true);
   
   const handleNavigation = (index) => {
     setActiveSection(index);
   };
 
   const handleWheel = (e) => {
-    if (isModalOpen) return;
+    if (isModalOpen || !allowSectionNavigation) return;
     
     e.preventDefault();
     
@@ -75,18 +76,32 @@ const AppContent = ({ cursorPosition }) => {
   };
 
   const handleTouchStart = (e) => {
-    if (isModalOpen) return;
+    if (isModalOpen || !allowSectionNavigation) return;
+    
+    // Check if touch is on a scrollable element (projects section)
+    const target = e.target.closest('[data-scrollable]');
+    if (target) {
+      return; // Don't handle section navigation for scrollable areas
+    }
+    
     touchStartY.current = e.touches[0].clientY;
   };
 
   const handleTouchEnd = (e) => {
-    if (isModalOpen) return;
+    if (isModalOpen || !allowSectionNavigation) return;
+    
+    // Check if touch is on a scrollable element (projects section)
+    const target = e.target.closest('[data-scrollable]');
+    if (target) {
+      return; // Don't handle section navigation for scrollable areas
+    }
+    
     touchEndY.current = e.changedTouches[0].clientY;
     handleSwipe();
   };
 
   const handleSwipe = () => {
-    if (isScrollingRef.current || isModalOpen) return;
+    if (isScrollingRef.current || isModalOpen || !allowSectionNavigation) return;
     
     const swipeThreshold = 50;
     const swipeDistance = touchStartY.current - touchEndY.current;
@@ -125,6 +140,12 @@ const AppContent = ({ cursorPosition }) => {
       }
     };
   }, []);
+
+  // Disable section navigation when in projects section on mobile
+  useEffect(() => {
+    const isMobile = window.innerWidth <= 768;
+    setAllowSectionNavigation(!(isMobile && activeSection === 2)); // Projects section is index 2
+  }, [activeSection]);
   
   return (
     <div 
