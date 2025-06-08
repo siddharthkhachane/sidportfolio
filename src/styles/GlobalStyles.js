@@ -7,26 +7,25 @@ const GlobalStyles = createGlobalStyle`
     box-sizing: border-box;
   }
   
-  html {
-    font-size: 16px;
-    scroll-behavior: smooth;
-  }
-  
-  body {
+  html, body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background: #0A0E1A;
+    background: linear-gradient(135deg, #0f111a 0%, #1a1d29 50%, #2a2d3a 100%);
     color: white;
     overflow-x: hidden;
     line-height: 1.6;
+    width: 100%;
+    height: 100%;
   }
   
   .app {
     min-height: 100vh;
     position: relative;
     overflow: hidden;
+    width: 100%;
   }
   
   ::-webkit-scrollbar {
@@ -70,34 +69,64 @@ const GlobalStyles = createGlobalStyle`
     outline-offset: 2px;
   }
 
+  /* Tablet styles */
+  @media (max-width: 1024px) {
+    html, body {
+      font-size: 14px;
+    }
+    
+    .app {
+      padding: 0;
+    }
+    
+    main {
+      padding: 1rem;
+    }
+  }
+
+  /* Mobile Large (768px and below) */
   @media (max-width: 768px) {
     html, body {
       overflow-x: hidden;
       touch-action: pan-y;
       -webkit-overflow-scrolling: touch;
+      font-size: 14px;
     }
     
     .app {
       touch-action: pan-y;
       -webkit-overflow-scrolling: touch;
+      width: 100vw;
+      overflow-x: hidden;
     }
     
     main {
       padding: 1rem !important;
+      width: 100%;
+      max-width: 100vw;
+      overflow-x: hidden;
     }
     
     h1 {
       font-size: 2.5rem !important;
+      line-height: 1.1 !important;
     }
     
     h2 {
       font-size: 2rem !important;
+      line-height: 1.2 !important;
+    }
+    
+    h3 {
+      font-size: 1.5rem !important;
     }
     
     p {
       font-size: 1rem !important;
+      line-height: 1.5 !important;
     }
     
+    /* Fix for elements with inline styles */
     div[style*="right: 30px"], div[style*="right: 15px"] {
       right: 15px !important;
     }
@@ -110,23 +139,41 @@ const GlobalStyles = createGlobalStyle`
     div[style*="font-size: 2rem"] {
       font-size: 1.5rem !important;
     }
+    
+    /* Ensure all containers are mobile-friendly */
+    section, div {
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
   }
   
+  /* Mobile Small (480px and below) */
   @media (max-width: 480px) {
+    html, body {
+      font-size: 12px;
+    }
+    
     main {
       padding: 0.5rem !important;
     }
     
     h1 {
       font-size: 2rem !important;
+      line-height: 1.1 !important;
     }
     
     h2 {
       font-size: 1.5rem !important;
+      line-height: 1.2 !important;
+    }
+    
+    h3 {
+      font-size: 1.2rem !important;
     }
     
     p {
-      font-size: 0.8rem !important;
+      font-size: 0.9rem !important;
+      line-height: 1.4 !important;
     }
     
     div[style*="right: 30px"], div[style*="right: 15px"] {
@@ -140,6 +187,35 @@ const GlobalStyles = createGlobalStyle`
     
     div[style*="padding: 2rem"], div[style*="padding: 1rem"] {
       padding: 0.5rem !important;
+    }
+    
+    /* Button adjustments for small screens */
+    button {
+      min-height: 44px;
+      font-size: 0.9rem !important;
+    }
+  }
+  
+  /* Mobile Extra Small (320px and below) */
+  @media (max-width: 320px) {
+    html, body {
+      font-size: 11px;
+    }
+    
+    h1 {
+      font-size: 1.8rem !important;
+    }
+    
+    h2 {
+      font-size: 1.3rem !important;
+    }
+    
+    p {
+      font-size: 0.8rem !important;
+    }
+    
+    main {
+      padding: 0.25rem !important;
     }
   }
 `;
