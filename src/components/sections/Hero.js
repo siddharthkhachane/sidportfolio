@@ -29,7 +29,7 @@ const Hero = () => {
 
   const handleDownloadCV = () => {
     const link = document.createElement('a');
-    link.href = '/assets/Siddharth_Khachane_CV.pdf';
+    link.href = '/Siddharth_Khachane_CV.pdf';
     link.download = 'Siddharth_Khachane_CV.pdf';
     link.target = '_blank';
     document.body.appendChild(link);
