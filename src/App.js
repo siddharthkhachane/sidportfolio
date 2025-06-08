@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Layout from './components/layout/Layout';
 import Hero from './components/sections/Hero';
 import About from './components/sections/About';
@@ -13,7 +13,6 @@ import GlobalStyles from './styles/GlobalStyles';
 const App = () => {
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   
-  // Track cursor position
   useEffect(() => {
     const handleMouseMove = (event) => {
       setCursorPosition({ x: event.clientX, y: event.clientY });
@@ -35,23 +34,48 @@ const App = () => {
 
 export default App;
 
-// Separate component that can use the Navigation context
 const AppContent = ({ cursorPosition }) => {
   const { sections, activeSection, setActiveSection } = useNavigation();
+  const isScrollingRef = useRef(false);
+  const scrollTimeoutRef = useRef(null);
   
-  // Handle navigation
   const handleNavigation = (index) => {
     setActiveSection(index);
   };
 
-  // Handle scroll navigation
   const handleWheel = (e) => {
-    if (e.deltaY > 0 && activeSection < sections.length - 1) {
+    e.preventDefault();
+    
+    if (isScrollingRef.current) return;
+    
+    const threshold = 50;
+    
+    if (Math.abs(e.deltaY) < threshold) return;
+    
+    isScrollingRef.current = true;
+    
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
+    
+    if (e.deltaY > threshold && activeSection < sections.length - 1) {
       setActiveSection(prev => prev + 1);
-    } else if (e.deltaY < 0 && activeSection > 0) {
+    } else if (e.deltaY < -threshold && activeSection > 0) {
       setActiveSection(prev => prev - 1);
     }
+    
+    scrollTimeoutRef.current = setTimeout(() => {
+      isScrollingRef.current = false;
+    }, 800);
   };
+  
+  useEffect(() => {
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, []);
   
   return (
     <div className="app" onWheel={handleWheel}>
@@ -76,4 +100,3 @@ const AppContent = ({ cursorPosition }) => {
     </div>
   );
 };
-
