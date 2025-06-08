@@ -40,12 +40,15 @@ const AppContent = ({ cursorPosition }) => {
   const scrollTimeoutRef = useRef(null);
   const touchStartY = useRef(0);
   const touchEndY = useRef(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
   const handleNavigation = (index) => {
     setActiveSection(index);
   };
 
   const handleWheel = (e) => {
+    if (isModalOpen) return;
+    
     e.preventDefault();
     
     if (isScrollingRef.current) return;
@@ -72,16 +75,18 @@ const AppContent = ({ cursorPosition }) => {
   };
 
   const handleTouchStart = (e) => {
+    if (isModalOpen) return;
     touchStartY.current = e.touches[0].clientY;
   };
 
   const handleTouchEnd = (e) => {
+    if (isModalOpen) return;
     touchEndY.current = e.changedTouches[0].clientY;
     handleSwipe();
   };
 
   const handleSwipe = () => {
-    if (isScrollingRef.current) return;
+    if (isScrollingRef.current || isModalOpen) return;
     
     const swipeThreshold = 50;
     const swipeDistance = touchStartY.current - touchEndY.current;
@@ -104,9 +109,17 @@ const AppContent = ({ cursorPosition }) => {
       isScrollingRef.current = false;
     }, 800);
   };
-  
+
   useEffect(() => {
+    const handleModalOpen = () => setIsModalOpen(true);
+    const handleModalClose = () => setIsModalOpen(false);
+    
+    document.addEventListener('modalOpen', handleModalOpen);
+    document.addEventListener('modalClose', handleModalClose);
+    
     return () => {
+      document.removeEventListener('modalOpen', handleModalOpen);
+      document.removeEventListener('modalClose', handleModalClose);
       if (scrollTimeoutRef.current) {
         clearTimeout(scrollTimeoutRef.current);
       }
@@ -128,7 +141,7 @@ const AppContent = ({ cursorPosition }) => {
       <Layout>
         {activeSection === 0 && <Hero />}
         {activeSection === 1 && <About />}
-        {activeSection === 2 && <Projects />}
+        {activeSection === 2 && <Projects setIsModalOpen={setIsModalOpen} />}
         {activeSection === 3 && <Contact />}
       </Layout>
       
