@@ -24,12 +24,17 @@ const Hero = () => {
   }, []);
 
   const handleExploreClick = () => {
-    setActiveSection(1); // Navigate to About section
+    setActiveSection(1);
   };
 
   const handleDownloadCV = () => {
-    // Add your CV download logic here
-    console.log('Downloading CV...');
+    const link = document.createElement('a');
+    link.href = '/assets/Siddharth_Khachane_CV.pdf';
+    link.download = 'Siddharth_Khachane_CV.pdf';
+    link.target = '_blank';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -103,7 +108,6 @@ const Hero = () => {
   );
 };
 
-// Styled components
 const HeroContainer = styled.div`
   height: 100vh;
   width: 100%;
