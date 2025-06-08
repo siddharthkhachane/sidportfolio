@@ -1,128 +1,156 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
-import ProjectCard from '../projects/ProjectCard';
-import ProjectDetails from '../projects/ProjectDetails';
-import { projectsData } from '../../data/projects';
-import { useNavigation } from '../../context/NavigationContext';
+import React, { useState, useEffect, useRef } from 'react';
+import Layout from './components/layout/Layout';
+import Hero from './components/sections/Hero';
+import About from './components/sections/About';
+import Projects from './components/sections/Projects';
+import Contact from './components/sections/Contact';
+import NavigationDots from './components/common/NavigationDots';
+import CustomCursor from './components/common/CustomCursor';
+import { ThemeProvider } from './context/ThemeContext';
+import { NavigationProvider, useNavigation } from './context/NavigationContext';
+import GlobalStyles from './styles/GlobalStyles';
 
-const Projects = () => {
-  const { sections, activeSection } = useNavigation();
-  const [selectedProject, setSelectedProject] = useState(null);
-  const currentColor = sections[activeSection].color;
+const App = () => {
+  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   
-  const handleProjectClick = (project) => {
-    setSelectedProject(project);
-  };
-  
-  const closeProjectDetails = () => {
-    setSelectedProject(null);
-  };
-  
+  useEffect(() => {
+    const handleMouseMove = (event) => {
+      setCursorPosition({ x: event.clientX, y: event.clientY });
+    };
+    
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   return (
-    <ProjectsContainer>
-      <SectionHeader backgroundColor={currentColor}>
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          My Projects
-        </motion.h1>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          Explore my latest work and creative endeavors
-        </motion.p>
-      </SectionHeader>
-      
-      <ProjectsGrid>
-        {projectsData.map((project, index) => (
-          <motion.div
-            key={project.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 * (index + 1) }}
-          >
-            <ProjectCard 
-              project={project} 
-              onClick={() => handleProjectClick(project)}
-              color={currentColor}
-            />
-          </motion.div>
-        ))}
-      </ProjectsGrid>
-      
-      <AnimatePresence>
-        {selectedProject && (
-          <ProjectDetailsOverlay
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <ProjectDetails 
-              project={selectedProject} 
-              onClose={closeProjectDetails}
-              color={currentColor}
-            />
-          </ProjectDetailsOverlay>
-        )}
-      </AnimatePresence>
-    </ProjectsContainer>
+    <ThemeProvider>
+      <NavigationProvider>
+          <GlobalStyles />
+          <AppContent cursorPosition={cursorPosition} />
+      </NavigationProvider>
+    </ThemeProvider>
   );
 };
 
-const ProjectsContainer = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
+export default App;
 
-const SectionHeader = styled.div`
-  text-align: center;
-  margin-bottom: 3rem;
+const AppContent = ({ cursorPosition }) => {
+  const { sections, activeSection, setActiveSection } = useNavigation();
+  const isScrollingRef = useRef(false);
+  const scrollTimeoutRef = useRef(null);
+  const touchStartY = useRef(0);
+  const touchEndY = useRef(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
-  h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    background: linear-gradient(to right, #ffffff, ${props => props.backgroundColor});
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
+  const handleNavigation = (index) => {
+    setActiveSection(index);
+  };
+
+  const handleWheel = (e) => {
+    if (isModalOpen) return;
+    
+    e.preventDefault();
+    
+    if (isScrollingRef.current) return;
+    
+    const threshold = 50;
+    
+    if (Math.abs(e.deltaY) < threshold) return;
+    
+    isScrollingRef.current = true;
+    
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
+    
+    if (e.deltaY > threshold && activeSection < sections.length - 1) {
+      setActiveSection(prev => prev + 1);
+    } else if (e.deltaY < -threshold && activeSection > 0) {
+      setActiveSection(prev => prev - 1);
+    }
+    
+    scrollTimeoutRef.current = setTimeout(() => {
+      isScrollingRef.current = false;
+    }, 800);
+  };
+
+  const handleTouchStart = (e) => {
+    if (isModalOpen) return;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e) => {
+    if (isModalOpen) return;
+    touchEndY.current = e.changedTouches[0].clientY;
+    handleSwipe();
+  };
+
+  const handleSwipe = () => {
+    if (isScrollingRef.current || isModalOpen) return;
+    
+    const swipeThreshold = 50;
+    const swipeDistance = touchStartY.current - touchEndY.current;
+    
+    if (Math.abs(swipeDistance) < swipeThreshold) return;
+    
+    isScrollingRef.current = true;
+    
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
+    
+    if (swipeDistance > 0 && activeSection < sections.length - 1) {
+      setActiveSection(prev => prev + 1);
+    } else if (swipeDistance < 0 && activeSection > 0) {
+      setActiveSection(prev => prev - 1);
+    }
+    
+    scrollTimeoutRef.current = setTimeout(() => {
+      isScrollingRef.current = false;
+    }, 800);
+  };
+
+  useEffect(() => {
+    const handleModalOpen = () => setIsModalOpen(true);
+    const handleModalClose = () => setIsModalOpen(false);
+    
+    document.addEventListener('modalOpen', handleModalOpen);
+    document.addEventListener('modalClose', handleModalClose);
+    
+    return () => {
+      document.removeEventListener('modalOpen', handleModalOpen);
+      document.removeEventListener('modalClose', handleModalClose);
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, []);
   
-  p {
-    font-size: 1.2rem;
-    color: rgba(255, 255, 255, 0.8);
-  }
-`;
-
-const ProjectsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 30px;
-  width: 100%;
-  
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
-`;
-
-const ProjectDetailsOverlay = styled(motion.div)`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(10px);
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-`;
-
-export default Projects;
+  return (
+    <div 
+      className="app" 
+      onWheel={handleWheel}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
+      <CustomCursor 
+        position={cursorPosition} 
+        color={sections[activeSection].color} 
+      />
+      
+      <Layout>
+        {activeSection === 0 && <Hero />}
+        {activeSection === 1 && <About />}
+        {activeSection === 2 && <Projects setIsModalOpen={setIsModalOpen} />}
+        {activeSection === 3 && <Contact />}
+      </Layout>
+      
+      <NavigationDots 
+        sections={sections} 
+        activeSection={activeSection} 
+        onChange={handleNavigation} 
+      />
+      
+    </div>
+  );
+};
