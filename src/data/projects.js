@@ -13,7 +13,7 @@ export const projectsData = [
         'Persistent state management with automatic cloud backup',
       ],
       liveUrl: 'https://collab-canvas-topaz.vercel.app/',
-      codeUrl: 'https://github.com/siddharthkhachane/colab/',
+      codeUrl: 'https://github.com/siddharthkhachane/CollabCanvas',
       year: 2025
     },
     {
